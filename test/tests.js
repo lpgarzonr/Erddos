@@ -101,6 +101,19 @@ QUnit.test( "Given a list of papers, the computeErdosNumber should not assing a 
 	assert.equal( result.length, 0);
 });
 
+QUnit.test("should set the correct ErdosNumber from a given list of papers", function (assert) {
+	//arrange
+	var papers = [ new Paper('Title', 
+		[new Author('Leidy', 'Garzon'), new Author('Paul', 'Erdos')])];
+	//act
+	buildAuthoringRelationGraph(papers);
+	var erdosIndex = getIndexOfAuthor(new Author('Paul', 'Erdos'));
+	computeErdosNumber(erdosIndex, 0);
+
+	//assert
+	assert.ok(authoringRelationGraph[0][0].erdosNumber == 1 && authoringRelationGraph[1][0].erdosNumber == 0);    
+});
+
 function getListOfAuthors(papers) {
 		var authorsList = _.flatten(papers.map(function(paper){
 		return (paper.authors);
