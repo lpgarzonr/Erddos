@@ -39,6 +39,21 @@ QUnit.test( "At least one paper should include Paul Erdos as an author", functio
 	assert.equal( isErdosInAuthorList, 1);
 });
 
+QUnit.test( "get author relation list", function( assert ) {
+	//arrange
+	var papers = buildInputPaperList();
+
+	//act
+	var targetAuthor = new Author('Paul', 'Erdos');
+	var authorsList = buildAuthoringRelationGraph(papers);
+
+	var erdosIndex = getIndexOfAuthor(targetAuthor);
+	computeErdosNumber(erdosIndex, 0);
+
+	//assert
+	assert.equal( 1, 1);
+});
+
 	function containsAuthor(arr, obj) {
 	    for (var i = 0; i < arr.length; i++) {
 	        if (arr[i].firstName == obj.firstName && arr[i].lastName == obj.lastName ) {
