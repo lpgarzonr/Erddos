@@ -1,7 +1,4 @@
 
-//TODO: All papers should have at least one outhor
-//TODO: At least one paper shour include Erdos as an author
-
 QUnit.module( "buildInputPaperArray test", {
   beforeEach: function( assert ) {
   	//arrange
