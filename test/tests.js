@@ -14,7 +14,7 @@ QUnit.test( "all papers should have at least one author", function( assert ) {
 
 	//act
 	var papersWithNoAuthors = papers.filter(function(paper){
-		return paper.authors.length == 0;
+		return paper.authors.length === 0;
 	});
 
 	//assert
@@ -74,7 +74,7 @@ QUnit.test( "Given a list of papers, the computeErdosNumber should assing a erdo
 	var erdosIndex = getIndexOfAuthor(targetAuthor);
 	computeErdosNumber(erdosIndex, 0);
 	var result = authoringRelationGraph.filter(function (authorNode){
-		return (authorNode[0].isVisited == true && authorNode[0].erdosNumber == -1);
+		return (authorNode[0].isVisited === true && authorNode[0].erdosNumber === -1);
 	});
 
 	//assert
@@ -91,7 +91,7 @@ QUnit.test( "Given a list of papers, the computeErdosNumber should not assing a 
 	var erdosIndex = getIndexOfAuthor(targetAuthor);
 	computeErdosNumber(erdosIndex, 0);
 	var result = authoringRelationGraph.filter(function (authorNode){
-		return (authorNode[0].isVisited == false && authorNode[0].erdosNumber != -1);
+		return (authorNode[0].isVisited === false && authorNode[0].erdosNumber !== -1);
 	});
 
 	//assert
@@ -108,7 +108,7 @@ QUnit.test("should set the correct ErdosNumber from a given list of papers", fun
 	computeErdosNumber(erdosIndex, 0);
 
 	//assert
-	assert.ok(authoringRelationGraph[0][0].erdosNumber == 1 && authoringRelationGraph[1][0].erdosNumber == 0);    
+	assert.ok(authoringRelationGraph[0][0].erdosNumber === 1 && authoringRelationGraph[1][0].erdosNumber === 0);    
 });
 
 function getListOfAuthors(papers) {
@@ -120,9 +120,26 @@ function getListOfAuthors(papers) {
 
 function containsAuthor(arr, obj) {
     for (var i = 0; i < arr.length; i++) {
-        if (arr[i].firstName == obj.firstName && arr[i].lastName == obj.lastName ) {
+        if (arr[i].firstName === obj.firstName && arr[i].lastName === obj.lastName ) {
             return true;
         }
     }
     return false;
+};
+
+
+/**
+ * Paper list builder.
+ * @return [Paper, [Author]] papers - The Papers list.
+ */
+function buildInputPaperList(){
+	var erdos = new Author('Paul', 'Erdos');
+	var papers = [
+		new Paper('Towards a component based GA', 
+		[new Author('Leidy P', 'Garzon'), new Author('Sergio', 'Rojas-Galeano'), new Author('Henry', 'Diosa')]),
+		new Paper('Estimation of relevant variables on high-dimensional biological patterns using iterated weighted kernel functions', 
+		[new Author('Sergio', 'Rojas-Galeano'), new Author('Dan', 'Agranoff'), new Author('Sanjeev', 'Krishna')]),
+		new Paper('The love of math', 
+		[new Author('Sergio', 'Rojas-Galeano'), erdos, new Author('Elisa', 'Rodriguez')])];
+	return papers;
 };

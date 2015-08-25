@@ -24,28 +24,12 @@ function Paper(title, autors){
 };
 
 /**
- * Paper list builder.
- * @return [Paper, [Author]] papers - The Papers list.
- */
-function buildInputPaperList(){
-	var erdos = new Author('Paul', 'Erdos');
-	var papers = [
-		new Paper('Towards a component based GA', 
-		[new Author('Leidy P', 'Garzon'), new Author('Sergio', 'Rojas-Galeano'), new Author('Henry', 'Diosa')]),
-		new Paper('Estimation of relevant variables on high-dimensional biological patterns using iterated weighted kernel functions', 
-		[new Author('Sergio', 'Rojas-Galeano'), new Author('Dan', 'Agranoff'), new Author('Sanjeev', 'Krishna')]),
-		new Paper('The love of math', 
-		[new Author('Sergio', 'Rojas-Galeano'), erdos, new Author('Elisa', 'Rodriguez')])];
-	return papers;
-};
-
-/**
  * Determine if two given authors have the same atributes values.
  * @param {Author} authorBase.
  * @param {Author} authorCompare.
  */
 function areEqual(authorBase, authorCompare){
-	if (authorBase.firstName == authorCompare.firstName && authorBase.lastName == authorCompare.lastName ) {
+	if (authorBase.firstName === authorCompare.firstName && authorBase.lastName === authorCompare.lastName ) {
 	    return true;
 	}
 	return false;
@@ -56,7 +40,7 @@ function areEqual(authorBase, authorCompare){
  * @param [Paper] papers -  List of papers from which the aruthor graph will be created.
  */
 function buildAuthoringRelationGraph(papers){
-	var authorsList = papers.map(function(paper){
+	papers.forEach(function(paper){
 		var authors = paper.authors;
 		var authorPartnerList = [];
 		authors.forEach(function(author){
@@ -110,7 +94,7 @@ function computeErdosNumber(authorIndex, n){
  */
 function getIndexOfAuthor(author){
 	for (var i = 0 ; i < authoringRelationGraph.length ; i++){
-		if ( areEqual(author, authoringRelationGraph[i][0])){
+		if (areEqual(author, authoringRelationGraph[i][0])){
 			return i;
 		}
 	}
