@@ -1,6 +1,3 @@
-// [Author, [Author]] - Representation of the author relations graph. 
-var authoringRelationGraph = [];
-
 /**
  * Constructor of an Author.
  * @param {string} firstName - The Authors first name.
@@ -40,11 +37,12 @@ function areEqual(authorBase, authorCompare){
  * @param [Paper] papers -  List of papers from which the aruthor graph will be created.
  */
 function buildAuthoringRelationGraph(papers){
+	var authoringRelationGraph = [];
 	papers.forEach(function(paper){
 		var authors = paper.authors;
 		var authorPartnerList = [];
 		authors.forEach(function(author){
-		authorPartnerList = getAuthorPartnerList(author)|| [] ;
+		authorPartnerList = getAuthorPartnerList(author, authoringRelationGraph)|| [] ;
 			authors.forEach(function(authorPartner){
 				if (!areEqual(author,authorPartner)){
 					authorPartnerList.push(authorPartner);
@@ -53,9 +51,10 @@ function buildAuthoringRelationGraph(papers){
 			authoringRelationGraph.push([author, authorPartnerList]);
 		})
 	});
+	return authoringRelationGraph;
 };
 
-function getAuthorPartnerList(author){
+function getAuthorPartnerList(author, authoringRelationGraph){
 		for (var i = 0; i< authoringRelationGraph.length; i++){
 			if (areEqual(author, authoringRelationGraph[i][0])){
 				var authorPartnerList = authoringRelationGraph[i][1];
@@ -70,7 +69,7 @@ function getAuthorPartnerList(author){
  * @param {number} authorIndex - index of the author from which the distance will be calculated.
  * @return {number} n - erdos number to be assing.
  */
-function computeErdosNumber(authorIndex, n){
+function computeErdosNumber(authorIndex, n, authoringRelationGraph){
 		if (authoringRelationGraph[authorIndex][0].isVisited){			
 			if(authoringRelationGraph[authorIndex][0].erdosNumber > n){
 				authoringRelationGraph[authorIndex][0].erdosNumber = n;
@@ -80,11 +79,12 @@ function computeErdosNumber(authorIndex, n){
 			authoringRelationGraph[authorIndex][0].erdosNumber = n; 
 
 			for (var i = 0; i < authoringRelationGraph[authorIndex][1].length; i++){
-				var newIndex = getIndexOfAuthor(authoringRelationGraph[authorIndex][1][i]);
+				var newIndex = getIndexOfAuthor(authoringRelationGraph[authorIndex][1][i], authoringRelationGraph);
 				//TailRecursion :)
-				computeErdosNumber(newIndex, authoringRelationGraph[authorIndex][0].erdosNumber + 1);
+				computeErdosNumber(newIndex, authoringRelationGraph[authorIndex][0].erdosNumber + 1, authoringRelationGraph);
 			}
-		}	
+		}
+	return authoringRelationGraph;
 };
 
 /**
@@ -92,7 +92,7 @@ function computeErdosNumber(authorIndex, n){
  * @param {Author} author.
  * @return {number} index.
  */
-function getIndexOfAuthor(author){
+function getIndexOfAuthor(author, authoringRelationGraph){
 	for (var i = 0 ; i < authoringRelationGraph.length ; i++){
 		if (areEqual(author, authoringRelationGraph[i][0])){
 			return i;

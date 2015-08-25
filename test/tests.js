@@ -57,7 +57,7 @@ QUnit.test( "Given a list of papers, the buildAuthoringRelationGraph.length shou
 	var papers = buildInputPaperList();
 
 	//act
-	buildAuthoringRelationGraph(papers);
+	var authoringRelationGraph = buildAuthoringRelationGraph(papers);
 	var listOfAuthors = getListOfAuthors(papers);
 
 	//assert
@@ -69,11 +69,11 @@ QUnit.test( "Given a list of papers, the computeErdosNumber should assing a erdo
 	var papers = buildInputPaperList();
 
 	//act
-	buildAuthoringRelationGraph(papers);
+	var authoringRelationGraph = buildAuthoringRelationGraph(papers);
 	var targetAuthor = new Author('Paul', 'Erdos');
-	var erdosIndex = getIndexOfAuthor(targetAuthor);
-	computeErdosNumber(erdosIndex, 0);
-	var result = authoringRelationGraph.filter(function (authorNode){
+	var erdosIndex = getIndexOfAuthor(targetAuthor, authoringRelationGraph);
+	var authoringRelationGraphWithErdos = computeErdosNumber(erdosIndex, 0, authoringRelationGraph);
+	var result = authoringRelationGraphWithErdos.filter(function (authorNode){
 		return (authorNode[0].isVisited === true && authorNode[0].erdosNumber === -1);
 	});
 
@@ -86,11 +86,11 @@ QUnit.test( "Given a list of papers, the computeErdosNumber should not assing a 
 	var papers = buildInputPaperList();
 
 	//act
-	buildAuthoringRelationGraph(papers);
+	var authoringRelationGraph = buildAuthoringRelationGraph(papers);
 	var targetAuthor = new Author('Paul', 'Erdos');
-	var erdosIndex = getIndexOfAuthor(targetAuthor);
-	computeErdosNumber(erdosIndex, 0);
-	var result = authoringRelationGraph.filter(function (authorNode){
+	var erdosIndex = getIndexOfAuthor(targetAuthor, authoringRelationGraph);
+	var authoringRelationGraphWithErdos = computeErdosNumber(erdosIndex, 0, authoringRelationGraph);
+	var result = authoringRelationGraphWithErdos.filter(function (authorNode){
 		return (authorNode[0].isVisited === false && authorNode[0].erdosNumber !== -1);
 	});
 
@@ -103,12 +103,12 @@ QUnit.test("should set the correct ErdosNumber from a given list of papers", fun
 	var papers = [ new Paper('Title', 
 		[new Author('Leidy', 'Garzon'), new Author('Paul', 'Erdos')])];
 	//act
-	buildAuthoringRelationGraph(papers);
-	var erdosIndex = getIndexOfAuthor(new Author('Paul', 'Erdos'));
-	computeErdosNumber(erdosIndex, 0);
+	var authoringRelationGraph = buildAuthoringRelationGraph(papers);
+	var erdosIndex = getIndexOfAuthor(new Author('Paul', 'Erdos'), authoringRelationGraph);
+	var authoringRelationGraphWithErdos = computeErdosNumber(erdosIndex, 0, authoringRelationGraph);
 
 	//assert
-	assert.ok(authoringRelationGraph[0][0].erdosNumber === 1 && authoringRelationGraph[1][0].erdosNumber === 0);    
+	assert.ok(authoringRelationGraphWithErdos[0][0].erdosNumber === 1 && authoringRelationGraphWithErdos[1][0].erdosNumber === 0);    
 });
 
 function getListOfAuthors(papers) {
@@ -127,7 +127,6 @@ function containsAuthor(arr, obj) {
     return false;
 };
 
-
 /**
  * Paper list builder.
  * @return [Paper, [Author]] papers - The Papers list.
@@ -143,3 +142,4 @@ function buildInputPaperList(){
 		[new Author('Sergio', 'Rojas-Galeano'), erdos, new Author('Elisa', 'Rodriguez')])];
 	return papers;
 };
+
